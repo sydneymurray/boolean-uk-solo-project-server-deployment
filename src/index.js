@@ -18,7 +18,8 @@ app.use(morgan("dev"))
 /* SETUP ROUTES */
 
 app.get("*", (req, res) => {
-    res.json({ ok: true })
+    //res.json({ ok: true })
+    res.json({msg: "Running OK on port 3100"})
 })
   
 /* START SERVER */

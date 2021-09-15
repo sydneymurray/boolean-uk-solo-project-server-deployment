@@ -1,11 +1,51 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW")
+}
+
+model accounts {
+  accountID                                        Int            @id @default(autoincrement())
+  type                                             type           @default(CURRENT)
+  accountNumber                                    Int            @unique
+  overdraftLimit                                   Float
+  linkedAccount                                    Int?
+  active                                           Boolean
+  customerID                                       Int
+  customers                                        customers      @relation(fields: [customerID], references: [customerID], onDelete: SetNull)
+  transactions_accountsTotransactions_payeeAccount transactions[] @relation("accountsTotransactions_payeeAccount")
+  transactions_accountsTotransactions_payerAccount transactions[] @relation("accountsTotransactions_payerAccount")
+}
+
+model customers {
+  customerID Int        @id @default(autoincrement())
+  userName   String     @unique @db.VarChar(255)
+  password   String     @db.VarChar(255)
+  firstName  String     @db.VarChar(255)
+  lastName   String     @db.VarChar(255)
+  email      String     @unique @db.VarChar(255)
+  active     Boolean?
+  accounts   accounts[]
+}
+
+model transactions {
+  transactionID                                Int      @id
+  amount                                       Float
+  date                                         DateTime @default(now())
+  comments                                     String   @db.VarChar(255)
+  payeeAccount                                 Int
+  payerAccount                                 Int
+  accounts_accountsTotransactions_payeeAccount accounts @relation("accountsTotransactions_payeeAccount", fields: [payeeAccount], references: [accountNumber], onDelete: SetNull)
+  accounts_accountsTotransactions_payerAccount accounts @relation("accountsTotransactions_payerAccount", fields: [payerAccount], references: [accountNumber], onDelete: SetNull)
+}
+
+enum type {
+  BUSINESS
+  CURRENT
+  LOAN
+  SAVINGS
 }
