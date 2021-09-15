@@ -1,8 +1,11 @@
 require("dotenv").config()
-
 const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
+const cookieParser = require("cookie-parser");
+
+//const authRouter = require("./resources/Auth/routes.js")
+const {customersRouter} = require("./resources/customers/routes.js")
 
 const app = express()
 
@@ -17,9 +20,12 @@ app.use(morgan("dev"))
 
 /* SETUP ROUTES */
 
+//app.use(authRouter)
+
+app.use("/customers", customersRouter)
+
 app.get("*", (req, res) => {
-    //res.json({ ok: true })
-    res.json({msg: "Running OK on port 3100"})
+    res.status(404).json("Route Not Found");
 })
   
 /* START SERVER */
