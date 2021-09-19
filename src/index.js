@@ -2,7 +2,8 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
-const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser")
+const {validateToken} = require("./utils/JWTGenerator")
 
 const authRouter = require("./resources/Auth/routes.js")
 const {customersRouter} = require("./resources/customers/routes.js")
@@ -15,7 +16,7 @@ app.disable("x-powered-by")
 
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({extended: true}))
 app.use(morgan("dev"))
 app.use(cookieParser());
 
@@ -23,6 +24,15 @@ app.use(cookieParser());
 app.use(authRouter)
 
 // Protect the routes below for authorized users only
+app.use((req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) res.status(401).json({err: "Not Logged In"})
+  const validatedCustomer = validateToken(token)
+  if (validatedCustomer) {
+    req.customer = validatedCustomer
+    next()
+  } else res.status(401).json({err: "Not Logged In"})
+})
 
 // Unprotected App routes
 app.use("/customers", customersRouter)
