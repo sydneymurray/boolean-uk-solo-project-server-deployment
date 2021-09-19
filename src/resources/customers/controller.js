@@ -1,5 +1,4 @@
 const prisma = require("../../utils/prisma")
-// I'm importing from service my patched version of prisma model
 let customerClient = require("./service")
 
 const getAllCustomers = async (req, res) => {

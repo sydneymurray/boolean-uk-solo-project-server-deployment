@@ -1,49 +1,43 @@
-//let { Request, Response } = require("express")
-//let {customers} = require("@prisma/client")
-let {findUserWithValidation} = require("./service")
+let {validateCustomer, customers} = require("./service")
 let {createToken} = require("../../utils/JWTGenerator")
-let {customer} = require("./service")
-let dbClient = require("../../utils/prisma")
 
 const loginUser = async (req, res) => {
-  const loginDetails = req.body;
-
+  const loginDetails = req.body
   try {
-    const loggedUser = await findUserWithValidation(loginDetails);
-
+    const loggedInUser = await validateCustomer(loginDetails);
     const token = createToken({
-      id: loggedUser.id,
-      username: loggedUser.username,
+      customerID: loggedInUser.customerID,
+      userName: loggedInUser.userName,
     });
     res.cookie("token", token, { httpOnly: true });
-    res.json({ user: { id: loggedUser.id, username: loggedUser.username } });
+    res.json({customerID: loggedInUser.customerID, userName: loggedInUser.userName})
   } catch (error) {
-    res.status(401).json({ msg: error.message });
+    res.status(401).json({msg: error.message});
   }
-};
+}
 
 const createUser = async (req, res) => {
-  const newUser = req.body;
-  res.json({data: newUser})
+  const newCustomer = req.body
   try {
-    const savedUser = await customers.create({ data: newUser });
-
+    const dbResponse = await customers.create(newCustomer)
     const token = createToken({
-      id: savedUser.customerID,
-      username: savedUser.username,
-    });
-    res.cookie("token", token, { httpOnly: true });
-    res.json({ user: { id: savedUser.customerID, username: savedUser.username } });
+      customerID: dbResponse.customerID,
+      userName: dbResponse.userName,
+    })
+    res.cookie("token", token, {httpOnly: true})
+    res.json({customerID: dbResponse.customerID, userName: dbResponse.userName})
   } catch (error) {
     res.status(412).json({
-      msg: "You probably entered the sign up data in an invalid way ",
-    });
+      msg: "Incorrect Registration Details. Try using a different username."
+    })
   }
-};
+}
 
 const logoutUser = (req, res) => {
-  res.cookie("token", "", { maxAge: 1 });
+  res.cookie("token", "", {maxAge: 1})
   res.redirect("/");
-};
+}
 
 module.exports = {loginUser, createUser, logoutUser}
+
+
