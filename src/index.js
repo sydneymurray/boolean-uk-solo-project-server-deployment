@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser")
 const {validateToken} = require("./utils/JWTGenerator")
 
 const authRouter = require("./resources/Auth/routes.js")
+const accountsRouter = require("./resources/accounts/routes.js")
 const {customersRouter} = require("./resources/customers/routes.js")
 
 const app = express()
@@ -14,7 +15,8 @@ const app = express()
 
 app.disable("x-powered-by")
 
-app.use(cors())
+//app.use(cors())
+app.use(cors({origin: "http://localhost:3000", credentials: true}))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(morgan("dev"))
@@ -36,6 +38,7 @@ app.use((req, res, next) => {
 
 // Unprotected App routes
 app.use("/customers", customersRouter)
+app.use("/accounts", accountsRouter)
 
 // Unknown routes
 app.get("*", (req, res) => {

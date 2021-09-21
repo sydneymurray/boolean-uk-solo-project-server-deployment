@@ -9,10 +9,10 @@ const loginUser = async (req, res) => {
       customerID: loggedInUser.customerID,
       userName: loggedInUser.userName,
     });
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, { httpOnly: true })
     res.json({customerID: loggedInUser.customerID, userName: loggedInUser.userName})
   } catch (error) {
-    res.status(401).json({msg: error.message});
+    res.status(401).json({msg: error.message})
   }
 }
 

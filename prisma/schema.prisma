@@ -3,16 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW")
-  
 }
 
 model accounts {
   accountID                                        Int            @id @default(autoincrement())
   type                                             type           @default(CURRENT)
-  accountNumber                                    Int            @unique
   overdraftLimit                                   Float
   linkedAccount                                    Int?
   active                                           Boolean
@@ -37,11 +35,11 @@ model transactions {
   transactionID                                Int      @id
   amount                                       Float
   date                                         DateTime @default(now())
-  comments                                     String   @db.VarChar(255)
   payeeAccount                                 Int
   payerAccount                                 Int
-  accounts_accountsTotransactions_payeeAccount accounts @relation("accountsTotransactions_payeeAccount", fields: [payeeAccount], references: [accountNumber], onDelete: SetNull)
-  accounts_accountsTotransactions_payerAccount accounts @relation("accountsTotransactions_payerAccount", fields: [payerAccount], references: [accountNumber], onDelete: SetNull)
+  comments                                     String   @db.VarChar(255)
+  accounts_accountsTotransactions_payeeAccount accounts @relation("accountsTotransactions_payeeAccount", fields: [payeeAccount], references: [accountID], onDelete: SetNull)
+  accounts_accountsTotransactions_payerAccount accounts @relation("accountsTotransactions_payerAccount", fields: [payerAccount], references: [accountID], onDelete: SetNull)
 }
 
 enum type {
