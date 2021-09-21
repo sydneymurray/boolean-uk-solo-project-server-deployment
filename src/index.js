@@ -8,6 +8,7 @@ const {validateToken} = require("./utils/JWTGenerator")
 const authRouter = require("./resources/Auth/routes.js")
 const accountsRouter = require("./resources/accounts/routes.js")
 const {customersRouter} = require("./resources/customers/routes.js")
+const transactionsRouter = require("./resources/transactions/routes")
 
 const app = express()
 
@@ -20,14 +21,14 @@ app.use(cors({origin: "http://localhost:3000", credentials: true}))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(morgan("dev"))
-app.use(cookieParser());
+app.use(cookieParser())
 
 // Authorization routes for register, login & logout
 app.use(authRouter)
 
 // Protect the routes below for authorized users only
 app.use((req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.cookies.token
   if (!token) res.status(401).json({err: "Not Logged In"})
   const validatedCustomer = validateToken(token)
   if (validatedCustomer) {
@@ -36,9 +37,10 @@ app.use((req, res, next) => {
   } else res.status(401).json({err: "Not Logged In"})
 })
 
-// Unprotected App routes
+// Protected App routes
 app.use("/customers", customersRouter)
 app.use("/accounts", accountsRouter)
+app.use("/transactions", transactionsRouter)
 
 // Unknown routes
 app.get("*", (req, res) => {
