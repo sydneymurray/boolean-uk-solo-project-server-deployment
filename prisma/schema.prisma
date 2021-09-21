@@ -32,14 +32,14 @@ model customers {
 }
 
 model transactions {
-  transactionID                                Int      @id
+  transactionID                                Int       @id @default(autoincrement())
   amount                                       Float
-  date                                         DateTime @default(now())
-  payeeAccount                                 Int
-  payerAccount                                 Int
-  comments                                     String   @db.VarChar(255)
-  accounts_accountsTotransactions_payeeAccount accounts @relation("accountsTotransactions_payeeAccount", fields: [payeeAccount], references: [accountID], onDelete: SetNull)
-  accounts_accountsTotransactions_payerAccount accounts @relation("accountsTotransactions_payerAccount", fields: [payerAccount], references: [accountID], onDelete: SetNull)
+  date                                         DateTime  @default(now())
+  payeeAccount                                 Int?
+  payerAccount                                 Int?
+  comments                                     String    @db.VarChar(255)
+  accounts_accountsTotransactions_payeeAccount accounts? @relation("accountsTotransactions_payeeAccount", fields: [payeeAccount], references: [accountID])
+  accounts_accountsTotransactions_payerAccount accounts? @relation("accountsTotransactions_payerAccount", fields: [payerAccount], references: [accountID])
 }
 
 enum type {
