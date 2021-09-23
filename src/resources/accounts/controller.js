@@ -34,13 +34,19 @@ async function getStatement(req, res){
     res.status(561).json({msg: "NOT YOUR ACCOUNT!!!"})
   
   dbResponse = await prisma.transactions.findMany({
+    include: {
+      accounts_accountsTotransactions_payeeAccount:{ 
+        include: {customers: {select: {
+          firstName: true, lastName: true, email: true}}}},
+      accounts_accountsTotransactions_payerAccount:{ 
+        include: {customers: {select: {
+          firstName: true, lastName: true, email: true}}}}},
     where: {OR: [{payeeAccount: accountID}, {payerAccount: accountID}]},
     orderBy: {date: "desc"}})
   res.json(dbResponse)
 }
 
 module.exports = {getAllAccounts, createAccount, getStatement}
-
 
 
 

@@ -10,7 +10,11 @@ const loginUser = async (req, res) => {
       userName: loggedInUser.userName,
     });
     res.cookie("token", token, { httpOnly: true })
-    res.json({customerID: loggedInUser.customerID, userName: loggedInUser.userName})
+    res.json({
+      customerID: loggedInUser.customerID, 
+      userName: loggedInUser.userName,
+      firstName: loggedInUser.firstName,
+      lastName: loggedInUser.lastName})
   } catch (error) {
     res.status(401).json({msg: error.message})
   }
