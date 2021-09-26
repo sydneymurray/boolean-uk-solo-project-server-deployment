@@ -1,18 +1,19 @@
 const prisma = require("../../utils/prisma")
-let customerClient = require("./service")
 
 const getAllCustomers = async (req, res) => {
-  const allCustomers = await prisma.customers.findMany();
+  const allCustomers = await prisma.customers.findMany()
 
   res.json({ data: allCustomers });
-};
+}
 
-const createCustomer = async (req, res) => {
-  const newCustomer = req.body;
-  // This is my modified create version, with the password hashing!
-  const savedCustomer = await customerClient.createWithHash(newCustomer);
+const patchCustomer = async (req, res) => {
+  let customer = req.body
+  customer.customerID = Number(req.customer.customerID)
+  const customerID =  customer.customerID
 
-  res.json({ data: savedCustomer });
-};
+  let dbResponse = await prisma.customers.update({where: {customerID}, data: customer})
+  dbResponse.password = null
+  res.json(dbResponse)
+}
 
-module.exports = {getAllCustomers, createCustomer}
+module.exports = {getAllCustomers, patchCustomer}
