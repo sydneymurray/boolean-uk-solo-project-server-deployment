@@ -38,7 +38,7 @@ async function createTransaction(req, res) {
     where: {accountID: checkAccount}
   })
   if (!dbResponse)
-    res.status(561).json({msg: "Account does not exist"})      
+    res.status(404).json({msg: "Account does not exist"})      
 
   //if (!transaction.payerAccount || !transaction.payeeAccount)
   //  transaction.comments="CASH: " + transaction.comments

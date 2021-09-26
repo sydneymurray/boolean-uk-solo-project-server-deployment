@@ -1,9 +1,9 @@
 const {Router} = require("express")
-const {createCustomer, getAllCustomers} = require("./controller")
+const {patchCustomer, getAllCustomers} = require("./controller")
 
 const customersRouter = Router()
 
-customersRouter.get("/", getAllCustomers)
-customersRouter.post("/", createCustomer)
+//customersRouter.get("/", getAllCustomers)
+customersRouter.patch("/", patchCustomer)
 
 module.exports = {customersRouter}
