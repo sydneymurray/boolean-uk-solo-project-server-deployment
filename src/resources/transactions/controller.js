@@ -33,16 +33,14 @@ async function createTransaction(req, res) {
       res.status(561).json({msg: "NOT YOUR ACCOUNT!!!"})     
   }
 
-  let checkAccount = transaction.payeeAccount  
-  dbResponse = await prisma.accounts.findUnique({
-    where: {accountID: checkAccount}
-  })
-  if (!dbResponse)
-    res.status(404).json({msg: "Account does not exist"})      
+  if (transaction.payeeAccount){
+    let checkAccount = transaction.payeeAccount  
+    dbResponse = await prisma.accounts.findUnique({
+      where: {accountID: checkAccount}})    
+    if (!dbResponse)
+      res.status(404).json({msg: "Account does not exist"})
+  }      
 
-  //if (!transaction.payerAccount || !transaction.payeeAccount)
-  //  transaction.comments="CASH: " + transaction.comments
-  
   dbResponse = await prisma.transactions.create({data: transaction})
   res.json(dbResponse)
 }
