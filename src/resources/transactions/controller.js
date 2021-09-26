@@ -1,7 +1,7 @@
 const prisma = require("../../utils/prisma")
 
 async function getAllTransactions(req, res) {
-  let checkAccount = req.body.accountID
+  let checkAccount = Number(req.params.id)
   let dbResponse = await prisma.accounts.findUnique({
     where: {accountID: checkAccount}})
   
@@ -40,8 +40,8 @@ async function createTransaction(req, res) {
   if (!dbResponse)
     res.status(561).json({msg: "Account does not exist"})      
 
-  if (!transaction.payerAccount || !transaction.payeeAccount)
-    transaction.comments="CASH: " + transaction.comments
+  //if (!transaction.payerAccount || !transaction.payeeAccount)
+  //  transaction.comments="CASH: " + transaction.comments
   
   dbResponse = await prisma.transactions.create({data: transaction})
   res.json(dbResponse)

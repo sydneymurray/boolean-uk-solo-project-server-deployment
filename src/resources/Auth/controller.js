@@ -14,7 +14,8 @@ const loginUser = async (req, res) => {
       customerID: loggedInUser.customerID, 
       userName: loggedInUser.userName,
       firstName: loggedInUser.firstName,
-      lastName: loggedInUser.lastName})
+      lastName: loggedInUser.lastName,
+      email: loggedInUser.email})
   } catch (error) {
     res.status(401).json({msg: error.message})
   }

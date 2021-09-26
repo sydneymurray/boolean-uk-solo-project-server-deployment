@@ -23,7 +23,7 @@ async function createAccount(req, res) {
 }
 
 async function getStatement(req, res){
-  let accountID = req.body.accountID
+  let accountID = Number(req.params.id)
   let dbResponse = await prisma.accounts.findUnique({
     where: {accountID: accountID}})
 
