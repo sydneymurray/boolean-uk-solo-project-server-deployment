@@ -41,6 +41,22 @@ async function createTransaction(req, res) {
       res.status(404).json({msg: "Account does not exist"})
   }      
 
+  if (transaction.payerAccount){
+    let checkAccount = transaction.payerAccount  
+    let dbResponse = await prisma.transactions.findMany({
+      where: {OR: [{payeeAccount: checkAccount}, {payerAccount: checkAccount}]}
+    })
+    let balance = 0
+    dbResponse.map(transaction=>{
+      if (checkAccount===transaction.payeeAccount) balance+=transaction.amount 
+      else balance-=transaction.amount 
+    })
+    if (balance-transaction.amount<1){ 
+      res.status(901).json({msg: "Insufficent Funds"})
+      return
+    }     
+  }    
+
   dbResponse = await prisma.transactions.create({data: transaction})
   res.json(dbResponse)
 }
