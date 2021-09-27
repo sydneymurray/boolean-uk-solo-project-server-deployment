@@ -13,11 +13,11 @@ async function createAccount(req, res) {
   newAccount = {...newAccount, customerID: req.customer.customerID}
   let dbResponse = await prisma.accounts.create({data: newAccount})
 
-  let zeroDposit = await prisma.transactions.create({
-    amount: 0,
-    payeeAccount: dbResponse.accountID,
-    comments: "New Account"	  
-  })
+  //let zeroDeposit = await prisma.transactions.create({
+  //  amount: 0,
+  //  payeeAccount: dbResponse.accountID,
+  //  comments: "New Account"	  
+  //})
 
   res.json(dbResponse)
 }
