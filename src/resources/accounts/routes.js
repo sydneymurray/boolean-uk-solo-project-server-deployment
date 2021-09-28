@@ -5,7 +5,7 @@ const accountsRouter = Router()
 
 accountsRouter.get("/", getAllAccounts)
 accountsRouter.post("/", createAccount)
-accountsRouter.get("/statement/:id", getStatement)
+accountsRouter.get("/statement", getStatement)
 
 module.exports = accountsRouter
 

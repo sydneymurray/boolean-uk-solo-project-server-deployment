@@ -10,20 +10,25 @@ async function getAllAccounts(req, res) {
 
 async function createAccount(req, res) {
   let newAccount = req.body
-  newAccount = {...newAccount, customerID: req.customer.customerID}
+  newAccount = {...newAccount, 
+    customerID: Number(req.customer.customerID),
+    active: true,
+    overdraftLimit: Number(0)
+  }
   let dbResponse = await prisma.accounts.create({data: newAccount})
-
   //let zeroDeposit = await prisma.transactions.create({
   //  amount: 0,
   //  payeeAccount: dbResponse.accountID,
   //  comments: "New Account"	  
   //})
-
   res.json(dbResponse)
 }
 
 async function getStatement(req, res){
-  let accountID = Number(req.params.id)
+  //let accountID = Number(req.params.id)
+  let accountID = Number(req.headers.accountid)
+  console.error(accountID)
+
   let dbResponse = await prisma.accounts.findUnique({
     where: {accountID: accountID}})
 
