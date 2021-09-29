@@ -11,6 +11,7 @@ datasource db {
 model accounts {
   accountID                                        Int            @id @default(autoincrement())
   type                                             type           @default(CURRENT)
+  accountNumber                                    Int            @unique
   overdraftLimit                                   Float
   linkedAccount                                    Int?
   active                                           Boolean
