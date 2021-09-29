@@ -1,0 +1,29 @@
+@everyone Backend Deployment
+
+- Create a new database in ElephantSQL for your live app
+
+- If you have your frontend's localhost URL hard coded into your cors middleware, you need to add a variable in your .env file for FRONTEND_URL and replace the hard coded URL in the middleware with process.env.FRONTEND_URL
+
+- Add a file called Procfile into the root of your project (where your package.json is), and place this inside:
+
+release: npx prisma migrate deploy
+web: npm run compile
+
+
+- Commit and push those changes to GitHub
+
+- Head over to https://dashboard.heroku.com/ and login
+
+- Create a new app in the Heroku dashboard
+
+- Give it a name and choose Europe as the region
+
+- Set the "Deployment method" option to GitHub, click the Connect button and search for your backend's repository
+
+- Enable "Automatic Deploys"
+
+- Go to "Settings" in the Heroku dashboard and click Reveal Config Vars
+
+- Add each of your environment variables there. You don't need a shadow database for this, just your database URL and your frontend URL (the keys must be the same as defined in your .env file). Since you don't have a frontend deployed yet, you can set the value to your frontend URL to * for now
+
+- Your backend will automatically deploy every time you push to GitHub, but you can trigger a manual deploy at the bottom of the "Deploy" page
