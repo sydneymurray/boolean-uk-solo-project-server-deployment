@@ -4,6 +4,7 @@ const cors = require("cors")
 const morgan = require("morgan")
 const cookieParser = require("cookie-parser")
 const {validateToken} = require("./utils/JWTGenerator")
+const frontend_URL = process.env.FRONTEND_URL
 
 const authRouter = require("./resources/Auth/routes.js")
 const accountsRouter = require("./resources/accounts/routes.js")
@@ -17,7 +18,7 @@ const app = express()
 app.disable("x-powered-by")
 
 //app.use(cors())
-app.use(cors({origin: "http://localhost:3000", credentials: true}))
+app.use(cors({origin: frontend_URL, credentials: true}))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(morgan("dev"))
