@@ -11,6 +11,7 @@ async function getAllAccounts(req, res) {
 async function createAccount(req, res) {
   let newAccount = req.body
   newAccount = {...newAccount, 
+    accountNumber: 0,
   //  customerID: Number(req.customer.customerID),
     active: true,
     overdraftLimit: Number(0)
