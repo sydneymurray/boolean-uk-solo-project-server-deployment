@@ -6,6 +6,13 @@ const getAllCustomers = async (req, res) => {
   res.json({ data: allCustomers });
 }
 
+const getCustomer = async (req, res) => {
+  let dbResponse = await prisma.customers.findUnique({
+    where:{customerID: Number(req.customer.customerID)}})
+  dbResponse.password=null
+  res.json(dbResponse)
+}
+
 const patchCustomer = async (req, res) => {
   let customer = req.body
   customer.customerID = Number(req.customer.customerID)
@@ -16,4 +23,5 @@ const patchCustomer = async (req, res) => {
   res.json(dbResponse)
 }
 
-module.exports = {getAllCustomers, patchCustomer}
+module.exports = {getCustomer, getAllCustomers, patchCustomer}
+
