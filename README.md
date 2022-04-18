@@ -13,8 +13,7 @@ npm install
 Ensure that your .env files contains:- \
 API_URL = http://backend-location \
 DATABASE_URL = http://postgresql-location \
-SECRET_KEY = "your sql secret key"
-npm run start
+SECRET_KEY = "your sql secret key" 
 
 ## Notes
 Frontend GitHub located at:- \
